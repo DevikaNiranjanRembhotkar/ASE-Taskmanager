@@ -97,22 +97,22 @@ export default function Home() {
   }, []);
 
   // Overdue tasks notification
-  useEffect(() => {
-    tasks.forEach((task: any) => {
-      const dueDate = new Date(task.dueDate);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+  // useEffect(() => {
+  //   tasks.forEach((task: any) => {
+  //     const dueDate = new Date(task.dueDate);
+  //     const today = new Date();
+  //     today.setHours(0, 0, 0, 0);
 
-      if (!task.completed && dueDate < today) {
-        const overdueDays = Math.floor(
-          (today.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24)
-        );
-        toast(`${task.title} is overdue by ${overdueDays} day(s)`, {
-          position: "top-right",
-        });
-      }
-    });
-  }, []);
+  //     if (!task.completed && dueDate < today) {
+  //       const overdueDays = Math.floor(
+  //         (today.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24)
+  //       );
+  //       toast(`${task.title} is overdue by ${overdueDays} day(s)`, {
+  //         position: "top-right",
+  //       });
+  //     }
+  //   });
+  // }, []);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
