@@ -33,7 +33,11 @@ export async function getTaskById(taskId: string) {
 export async function createNewTask(taskData: any) {
   try {
     await connectToDatabase();
-    const newTask = await Task.create(taskData);
+    const task = {
+      ...taskData,
+      _id: new mongoose.Types.ObjectId(),
+    };
+    const newTask = await Task.create(task);
     return JSON.parse(JSON.stringify(newTask));
   } catch (error) {
     handleError(error);

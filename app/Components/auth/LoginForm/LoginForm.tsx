@@ -89,14 +89,14 @@ function LoginForm() {
           </button>
         </div>
 
-        <div className="mt-4 flex justify-end">
+        {/* <div className="mt-4 flex justify-end">
           <a
             href="/forgot-password"
             className="font-bold text-[#0064b1] text-[14px] hover:text-[#7263F3] transition-all duration-300"
           >
             Forgot password?
           </a>
-        </div>
+        </div> */}
 
         <div className="flex">
           <button

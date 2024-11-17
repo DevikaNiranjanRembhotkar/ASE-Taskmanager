@@ -3,21 +3,39 @@ import { CreateUserParams, registerUser } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-// import { registerUser } from "../actions"; // Adjust the path as needed
-
 function RegisterForm() {
-  // const router = useRouter()
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user");
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter(); // Initialize useRouter
+  const [passwordError, setPasswordError] = useState(""); // State for password error
+  const router = useRouter();
 
   const togglePassword = () => setShowPassword(!showPassword);
 
+  const validatePassword = (password: string): boolean => {
+    // Regex: Minimum 6 characters, at least one special character
+    const regex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
+    return regex.test(password);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+
+    if (!validatePassword(newPassword)) {
+      setPasswordError(
+        "Password must be at least 6 characters long and contain at least one special character."
+      );
+    } else {
+      setPasswordError("");
+    }
+  };
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (passwordError) return; // Prevent submission if password validation fails
     try {
       const newUser: CreateUserParams = {
         name,
@@ -84,8 +102,10 @@ function RegisterForm() {
             type={showPassword ? "text" : "password"}
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="px-4 py-3 border-[2px] rounded-md outline-[#0064b1] text-gray-800"
+            onChange={handlePasswordChange}
+            className={`px-4 py-3 border-[2px] rounded-md outline-[#0064b1] text-gray-800 ${
+              passwordError ? "border-red-500" : ""
+            }`}
             placeholder="***************"
           />
           <button
@@ -99,6 +119,11 @@ function RegisterForm() {
               <i className="fas fa-eye"></i>
             )}
           </button>
+        </div>
+        <div>
+          {passwordError && (
+            <span className="mt-1 text-red-500 text-sm">{passwordError}</span>
+          )}
         </div>
         <div className="relative mt-[1rem] flex flex-col">
           <label htmlFor="role" className="mb-1 text-[#999]">
@@ -118,7 +143,7 @@ function RegisterForm() {
         <div className="flex">
           <button
             type="submit"
-            disabled={!name || !email || !password}
+            disabled={!name || !email || !password || !!passwordError}
             className="mt-[1.5rem] flex-1 px-4 py-3 font-bold bg-[#0064b1] text-white rounded-md hover:bg-[#7263F3] transition-colors"
           >
             Register Now
